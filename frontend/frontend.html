@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="frontend.css">
+    <script>
+
+        var prediction = ''
+        var confidence = 0.0
+
+        function give_name(label){
+            console.log(label);
+            return_label = '';
+            switch (label) {
+                case 'en':
+                    return_label = 'English 🇬🇧';
+                    break;
+                case 'sv':
+                    return_label = 'Swedish 🇸🇪';
+                    break;
+                case 'cs':
+                    return_label = 'Czech 🇨🇿';
+                    break;
+                case 'bg':
+                    return_label = 'Bulgarian 🇧🇬';
+                    break;
+                case 'da':
+                    return_label = 'Danish 🇩🇰';
+                    break;
+                case 'de':
+                    return_label = 'German 🇩🇪';
+                    break;
+                case 'el':
+                    return_label = 'Greek 🇬🇷';
+                    break;
+                case 'es':
+                    return_label = 'Spanish 🇪🇸';
+                    break;
+                case 'et':
+                    return_label = 'Estonian 🇪🇪';
+                    break;
+                case 'fi':
+                    return_label = 'Finnish 🇫🇮';
+                    break;
+                case 'fr':
+                    return_label = 'French 🇫🇷';
+                    break;
+                case 'hu':
+                    return_label = 'Hungarian 🇭🇺';
+                    break;
+                case 'it':
+                    return_label = 'Italian 🇮🇹';
+                    break;
+                case 'lt':
+                    return_label = 'Lithuanian 🇱🇹';
+                    break;
+                case 'lv':
+                    return_label = 'Latvia 🇱🇻';
+                    break;
+                case 'nl':
+                    return_label = 'Dutch 🇳🇱';
+                    break;
+                case 'pl':
+                    return_label = 'Polish 🇵🇱';
+                    break;
+                case 'pt':
+                    return_label = 'Portuguese 🇵🇹';
+                    break;
+                case 'ro':
+                    return_label = 'Romanian 🇷🇴';
+                    break;
+                case 'sk':
+                    return_label = 'Slovak 🇸🇰';
+                    break;
+                case 'sl':
+                    return_label = 'Slovenian 🇸🇮';
+                    break;
+                default:
+                    return_label = "Unknown"
+                    break
+            }
+            return return_label;
+        }
+        function detect() {
+            if (!document.getElementById("prediction").classList.contains("hide")){
+                document.getElementById("prediction").classList.add("hide");
+            }
+            var text = document.getElementById("text").value;
+            fetch("http://127.0.0.1:8000/detect",{
+                method: "POST",
+                body: JSON.stringify({
+                    text: text
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                document.getElementById("prediction").classList.remove("hide");
+                document.getElementById("prediction-lang").innerText = give_name(json.prediction);
+                document.getElementById("prediction-confidence").innerText = parseFloat(json.confidence).toFixed(2);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Europarl Language Detector</h1>
+    <br>
+    <textarea id="text" class="text"></textarea>
+    <button class="button" onclick="detect()">Detect</button>
+    <div id="prediction" class="flex-column center hide">
+        <h1>Prediction</h1>
+        <h1 id="prediction-lang"></h1>
+        <h2 id="prediction-confidence"></h2>
+    </div>
+
+</body>
+</html>
