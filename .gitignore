@@ -1,7 +1,8 @@
-training/data/csv/
-training/data/txt/
-training/data/europarl.csv
+training/data/
 
 training/fastText/fastText/
+training/fastText/model/
+training/fastText/*.eval
+training/fastText/*.train
 
 .idea
